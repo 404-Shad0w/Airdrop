@@ -3,3 +3,14 @@ version: 0.0.1
 api: 5.0.0
 author: 404_Shad0w
 main: shadow\Loader
+
+permissions:
+  airdropgive.perm:
+    description: Allows the player to use the /airdropgive command
+    default: op
+  airdropedit.perm:
+    description: Allows the player to use the /airdropedit command
+    default: op
+  airdropclear.perm:
+    description: Allows the player to use the /airdropclear command
+    default: op
