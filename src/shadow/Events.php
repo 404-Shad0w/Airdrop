@@ -3,22 +3,14 @@
 namespace shadow;
 
 use pocketmine\block\tile\Chest;
-use pocketmine\block\tile\Furnace;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\Listener;
 use pocketmine\scheduler\ClosureTask;
 use pocketmine\utils\TextFormat;
 use pocketmine\world\particle\ExplodeParticle;
-use pocketmine\world\particle\FlameParticle;
 use pocketmine\world\particle\FloatingTextParticle;
-use pocketmine\world\particle\HugeExplodeParticle;
-use pocketmine\world\sound\AnvilFallSound;
 use pocketmine\world\sound\ExplodeSound;
-use muqsit\invmenu\InvMenu;
-use muqsit\invmenu\transaction\InvMenuTransaction;
-use muqsit\invmenu\transaction\InvMenuTransactionResult;
-use shadow\manager\Manager;
 use shadow\utils\Messages;
 
 class Events implements Listener {
@@ -33,7 +25,7 @@ class Events implements Listener {
         }
 
         $player = $event->getPlayer();
-        $blockPlaced = $event->getBlockAgainst(); // ← corrección aquí
+        $blockPlaced = $event->getBlockAgainst();
         $chestPos = $blockPlaced->getPosition()->up(1);
         $world = $player->getWorld();
 
