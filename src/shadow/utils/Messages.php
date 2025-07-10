@@ -2,7 +2,7 @@
 
 namespace shadow\utils;
 
-class Messsges
+class Messages
 {
     // Airdrop Messages
     public const SET_AIRDROP_ITEMS = "§3Airdrop §aitems have been set successfully.";
@@ -10,6 +10,8 @@ class Messsges
     public const CLEAR_AIRDROP_ITEMS = "§3Airdrop §aitems have been cleared successfully.";
     public const GIVE_AIRDROP_ITEM = "§3Airdrop §aitem has been given to the {player}.";
     public const NO_AIRDROP_ITEMS = "§cNo airdrop §aitems available.";
+    public const AIRDROP_OPENED = "§aYou have opened an airdrop.";
+    public const AIRDROP_NOT_FOUND = "§cAirdrop not found.";
 
     // Player Messages
     public const PLAYER_NOT_FOUND = "§cPlayer not found.";

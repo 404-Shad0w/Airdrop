@@ -5,11 +5,13 @@ namespace shadow\manager;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\type\InvMenuTypeIds;
 use pocketmine\inventory\Inventory;
+use pocketmine\item\Item;
 use pocketmine\player\Player;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 use shadow\Loader;
-use shadow\utils\Messsges;
+use shadow\utils\Messages;
+use shadow\utils\Serialize;
 
 class Manager
 {
@@ -24,12 +26,13 @@ class Manager
 
     public function load(): void
     {
-        if ($this->config->exists("items")) {
-            $this->aidrops = $this->config->get("items");
-        } else {
-            $this->aidrops = [];
+        $this->aidrops = [];
+        $raw = $this->config->get('items', []);
+        foreach ($raw as $itemData) {
+            $this->aidrops[] = Serialize::deserialize($itemData);
         }
     }
+
 
     public function setAirdropItems(array $items): void
     {
@@ -42,11 +45,12 @@ class Manager
         return $this->aidrops;
     }
 
-    public function getRandomAirdropItems(): ?int
+    public function getRandomAirdropItem(): ?Item
     {
         if (empty($this->aidrops)) return null;
 
-        return array_rand($this->aidrops);
+        $key = array_rand($this->aidrops);
+        return clone $this->aidrops[$key];
     }
 
     public function clearAirdropItems(): void
@@ -62,16 +66,19 @@ class Manager
         $menu->setInventoryCloseListener(function (Player $player, Inventory $inventory): void {
             $this->aidrops = $inventory->getContents();
             $this->setAirdropItems($this->aidrops);
-            $player->sendMessage(Messsges::EDIT_AIRDROP_ITEMS);
+            $player->sendMessage(Messages::EDIT_AIRDROP_ITEMS);
         });
         $menu->send($player, TextFormat::colorize('&3Airdrop Loot'));
     }
 
 
-
     public function save(): void
     {
-        $this->config->set("items", $this->aidrops);
+        $data = [];
+        foreach ($this->aidrops as $item) {
+            $data[] = Serialize::serialize($item);
+        }
+        $this->config->set('items', $data);
         $this->config->save();
     }
 }

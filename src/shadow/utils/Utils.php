@@ -3,35 +3,46 @@
 namespace shadow\utils;
 
 use pocketmine\block\VanillaBlocks;
+use pocketmine\item\Item;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 use shadow\Loader;
 
 class Utils
 {
-    public const AIRDROP_NAMEFORMAT = "§l§3Airdrop";
+    public const AIRDROP_NAMEFORMAT = '§l§3Airdrop';
 
     public static function giveAirdrop(Player $player, int $count = 1): void
     {
-        $itemContent = Loader::getInstance()->getManager()->getAirdropItems();
+        $airdropItems = Loader::getInstance()->getManager()->getAirdropItems();
 
-        if (empty($itemContent)) {
-            $player->sendMessage(Messsges::NO_AIRDROP_ITEMS);
+        if (empty($airdropItems)) {
+            $player->sendMessage(Messages::NO_AIRDROP_ITEMS);
             return;
         }
 
-        $airdrop = VanillaBlocks::FURNACE()->asItem();
+        $itemNames = [];
+
+        foreach ($airdropItems as $item) {
+            if ($item instanceof Item && $item->getName() !== '') {
+                $itemNames[] = TextFormat::colorize('§f• §7' . trim($item->getName()));
+            }
+        }
+
+        $airdrop = VanillaBlocks::CHEST()->asItem();
         $airdrop->setCustomName(self::AIRDROP_NAMEFORMAT);
         $airdrop->setCount($count);
         $airdrop->setLore([
-            "§7Airdrop items",
-            "§7Right Click to open",
-            "§7Contains: " . implode(TextFormat::colorize(", "), array_keys($itemContent)),
+            '§7§oAirdrop Items:',
+            ...$itemNames,
+            '',
+            '§e» Click derecho para abrir',
         ]);
         $airdrop->getNamedTag()->setString('airdrop_item', 'AIRDROP');
 
         $player->getInventory()->addItem($airdrop);
-        $msg = str_replace("{player}", $player->getName(), Messsges::GIVE_AIRDROP_ITEM);
+
+        $msg = str_replace('{player}', $player->getName(), Messages::GIVE_AIRDROP_ITEM);
         $player->sendMessage(TextFormat::colorize($msg));
     }
 }
